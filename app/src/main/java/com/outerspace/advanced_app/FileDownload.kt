@@ -6,28 +6,26 @@ import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FileDownload {
-    private lateinit var _url: String
-    private lateinit var _progress: MutableLiveData<Float>
+    private lateinit var url: String
+    private lateinit var progressConsumer: ProgressConsumerInterface
 
     class Factory {
         private val instance: FileDownload by lazy {
             FileDownload()
         }
 
-        fun url(url: String): Factory {
-            instance._url = url
+        fun fileUrl(url: String): Factory {
+            instance.url = url
             return this
         }
 
-        fun mutableProgress(progress: MutableLiveData<Float>): Factory {
-            instance._progress = progress
+        fun addProgressConsumer(progressConsumer: ProgressConsumerInterface): Factory {
+            instance.progressConsumer = progressConsumer
             return this
         }
 
@@ -37,7 +35,7 @@ class FileDownload {
     }
 
     fun download(activity: AppCompatActivity) {
-        val request = DownloadManager.Request(Uri.parse(_url))
+        val request = DownloadManager.Request(Uri.parse(url))
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setAllowedOverMetered(true)
@@ -49,49 +47,37 @@ class FileDownload {
         activity.lifecycleScope.launch {
             var percentage: Float = 0.0F
             var prevPercentage: Float = 0.0F
-            var isFinished = false
-            while(!isFinished) {
+            while(true) {
                 val cursor = downloadManager.query(DownloadManager.Query().setFilterById(downloadID))
-                if(cursor.moveToFirst()) {
-                    val colStatusIdx = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
-                    if (colStatusIdx < 0 ) continue
-                    when (cursor.getInt(colStatusIdx)) {           // status
-                        DownloadManager.STATUS_RUNNING -> {
-                            val colTotalSizeIdx = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
-                            val totalSize: Float = cursor.getLong(colTotalSizeIdx) * 1.0F
-                            if (totalSize > 0) {
-                                val colBytesSoFarIdx = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
-                                val bytesSoFar: Float = cursor.getLong(colBytesSoFarIdx) * 1.0F
-                                percentage = bytesSoFar / totalSize
-                            }
-                        }
-                        DownloadManager.STATUS_SUCCESSFUL -> {
-                            percentage = 1.0F
-                            isFinished = true
-                        }
-                        DownloadManager.STATUS_FAILED -> {
-                            isFinished = true
-                        }
-                    }
+                val colStatusIdx = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                cursor.moveToFirst()
+                if (colStatusIdx >= 0 ) {
+                    val colTotalSizeIdx = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                    val totalSize: Float = cursor.getLong(colTotalSizeIdx) * 1.0F
+                    if (totalSize <= 0) continue
+                    val colBytesSoFarIdx = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                    val bytesSoFar: Float = cursor.getLong(colBytesSoFarIdx) * 1.0F
+                    percentage = bytesSoFar / totalSize
                     if (percentage != prevPercentage) {
                         prevPercentage = percentage
-                        _progress.value = percentage        // notify the observer
-                        delay(100)
-                        Log.d("DOWNLOAD BYTES", "progress = $percentage")
+                        progressConsumer.progress(percentage)
                     }
+                    when (cursor.getInt(colStatusIdx)) {
+                        DownloadManager.STATUS_SUCCESSFUL -> {
+                            progressConsumer.progress(1.0F)
+                            progressConsumer.finish()
+                            break
+                        }
+                        DownloadManager.STATUS_FAILED -> {
+                            progressConsumer.error(R.string.download_error)
+                            break
+                        }
+                    }
+                    delay(50)
                 }
             }
         }
     }
 }
 
-//        var percentage = 0.0F
-//        val timer = object: CountDownTimer(3000, 30) {
-//            override fun onTick(millisUntilFinished: Long) {
-//                percentage += 0.01F
-//                _progress.value = percentage
-//            }
-//            override fun onFinish() {}
-//        }
-//        timer.start()
 

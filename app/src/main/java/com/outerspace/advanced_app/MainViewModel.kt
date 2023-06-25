@@ -1,9 +1,9 @@
 package com.outerspace.advanced_app
 
 import android.content.Context
+import android.util.TypedValue
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.lifecycle.ViewModel
 
 private class RadioButtonSpec(val id: Int, val face: String, val url: String )
@@ -18,8 +18,12 @@ class MainViewModel: ViewModel() {
 
     fun addButtons(radioGroup: RadioGroup, context: Context) {
         radioGroup.removeAllViews()
+        val txtSize = TypedValue()
+        context.resources.getValue(R.dimen.button_text_size, txtSize, true)
         for(spec in radioButtonSpecs) {
             val btn = RadioButton(context)
+            btn.textSize = txtSize.float
+            btn.setPadding(0,0,0, 40)
             btn.id = spec.id
             btn.text = spec.face
             btn.tag = spec.url
@@ -28,11 +32,12 @@ class MainViewModel: ViewModel() {
     }
 
     var selectedUrl: String? = null
+    lateinit var selectedFileName: String
 
     val onCheckedListener: RadioGroup.OnCheckedChangeListener =
-        RadioGroup.OnCheckedChangeListener { _, checkId -> selectedUrl = radioButtonSpecs.find {it.id == checkId}!!.url }
-
-    fun testFunction(): String {
-        return "Hello"
-    }
+        RadioGroup.OnCheckedChangeListener { _, checkId ->
+            val sel = radioButtonSpecs.find {it.id == checkId}!!
+            selectedUrl = sel.url
+            selectedFileName = sel.face.replace("[\\s-]+".toRegex(), "-")
+        }
 }
