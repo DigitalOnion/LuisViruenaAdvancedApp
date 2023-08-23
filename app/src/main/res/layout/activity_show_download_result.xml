@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <data>
+        <variable
+            name="binding"
+            type="com.outerspace.advanced_app.ShowDownloadData" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="32dp"
+        tools:context=".ShowDownloadResultActivity">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vGuide"
+            app:layout_constraintGuide_percent="0.2"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:id="@+id/label_title"
+            android:text="@string/DetailTitle"
+            style="@style/appTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/label_filename"
+            android:text="@string/labelFilename"
+            style="@style/appLabel"
+            app:layout_constraintTop_toBottomOf="@id/label_title"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_filename"
+            tools:text="The-Filename.doc"
+            style="@style/appValue"
+            android:text="@{binding.fileName}"
+            app:layout_constraintTop_toBottomOf="@id/label_filename"
+            app:layout_constraintLeft_toRightOf="@id/vGuide"/>
+
+        <TextView
+            android:id="@+id/label_last_update"
+            android:text="@string/labelLastUpdate"
+            style="@style/appLabel"
+            app:layout_constraintTop_toBottomOf="@id/text_filename"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_last_update"
+            tools:text="08/16/2023"
+            style="@style/appValue"
+            android:text="@{binding.lastModified}"
+            app:layout_constraintTop_toBottomOf="@id/label_last_update"
+            app:layout_constraintLeft_toRightOf="@id/vGuide"/>
+
+        <TextView
+            android:id="@+id/label_file_size"
+            android:text="@string/labelFileSize"
+            style="@style/appLabel"
+            app:layout_constraintTop_toBottomOf="@id/text_last_update"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_file_size"
+            tools:text="1300 kb"
+            style="@style/appValue"
+            android:text="@{binding.fileLength.toString()}"
+            app:layout_constraintTop_toBottomOf="@id/label_file_size"
+            app:layout_constraintLeft_toRightOf="@id/vGuide"/>
+
+        <TextView
+            android:id="@+id/label_download_status"
+            android:text="@string/labelDownloadStatus"
+            style="@style/appLabel"
+            app:layout_constraintTop_toBottomOf="@id/text_file_size"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_download_status"
+            tools:text="Successfully Downloaded"
+            style="@style/appValue"
+            android:text="@{binding.success}"
+            app:layout_constraintTop_toBottomOf="@id/label_download_status"
+            app:layout_constraintLeft_toRightOf="@id/vGuide"/>
+
+        <Button
+            android:id="@+id/buttonNavigateBack"
+            android:text="Back to downloads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -2,9 +2,28 @@
     <string name="app_name">LuisViruenaAdvancedApp2</string>
     <string name="app_label">Advanced App</string>
 
+    <string name="channel_name">Udacity Nano-Degree</string>
+    <string name="channel_description">Notifications from Udacity Nano-Degree assignments</string>
+
     <string name="select_a_file">Please select a file to download</string>
+    <string name="unknownFilename">Filename is unknown</string>
 
     <string name="click_to_download">Click to Download</string>
 
+    <string name="error">Download Error</string>
     <string name="download_error">Error: error downloading target file.</string>
+
+    <string name="notificationTitle">Luis\' Nanodegree Download</string>
+    <string name="notificationText">Luis\' Advanced App has downloaded a file.</string>
+    <string name="notificationButtonFace">View details</string>
+
+    <string name="downloadSuccess">Download Successful</string>
+    <string name="downloadFail">Download Failed</string>
+
+    <string name="DetailTitle">Download Detail</string>
+    <string name="labelFilename">File name:</string>
+    <string name="labelLastUpdate">Last Update:</string>
+    <string name="labelFileSize">File Size (bytes):</string>
+    <string name="labelDownloadStatus">Download Status:</string>
+
 </resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="appTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:textColor">#AA8822</item>
+    </style>
+
+    <style name="appLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#aaaaaa</item>
+    </style>
+
+    <style name="appValue">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#8888FF</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+</resources>

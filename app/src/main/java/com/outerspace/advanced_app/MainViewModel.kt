@@ -1,9 +1,11 @@
 package com.outerspace.advanced_app
 
 import android.content.Context
+import android.database.Cursor
 import android.util.TypedValue
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 private class RadioButtonSpec(val id: Int, val face: String, val url: String )
@@ -15,6 +17,8 @@ private val radioButtonSpecs = arrayOf<RadioButtonSpec>(
 )
 
 class MainViewModel: ViewModel() {
+
+    val downloadCompleted: MutableLiveData<Cursor> = MutableLiveData()
 
     fun addButtons(radioGroup: RadioGroup, context: Context) {
         radioGroup.removeAllViews()
